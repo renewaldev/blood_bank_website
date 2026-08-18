@@ -308,17 +308,27 @@ const AdminModule = {
   async approveVerification(donorId, newLevel) {
     const typeMap = ['', 'mobile', 'identity', 'bloodGroup', 'renewal'];
     const type = typeMap[newLevel] || 'renewal';
-    await DataStore.updateDonor(donorId, {
-      verificationLevel: newLevel,
-      [`verif_${type}`]: true,
+    
+    const donor = await DataStore.getDonorById(donorId);
+    if (!donor) return;
+
+    const log = donor.verificationLog || [];
+    log.push({
+      type: type,
+      date: new Date().toISOString().split('T')[0],
+      note: 'Verified by admin'
     });
 
-    const donor = await DataStore.getDonorById(donorId);
+    await DataStore.updateDonor(donorId, {
+      verificationLevel: newLevel,
+      verificationLog: log,
+    });
+
     const levelLabels = ['','<i class="fas fa-mobile"></i> মোবাইল','<i class="fas fa-id-card"></i> পরিচয়','<i class="fas fa-droplet"></i> রক্তের গ্রুপ','<i class="fas fa-star"></i> রিনিউয়েল'];
     Toast.show({
       type: 'success',
       title: 'যাচাই সম্পন্ন!',
-      message: `${donor?.name} — ${levelLabels[newLevel]} যাচাই করা হয়েছে।`
+      message: `${donor.name} — ${levelLabels[newLevel]} যাচাই করা হয়েছে।`
     });
     this.render();
   },
