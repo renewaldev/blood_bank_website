@@ -131,33 +131,17 @@ const App = {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অপেক্ষা করুন...';
     
     try {
-      // Try login first
       try {
         await DataStore.login(phone, pin);
       } catch (err) {
-        // If invalid credentials, we can't tell if wrong pin or new user due to security
-        // Actually supabase returns "Invalid login credentials"
-        // Let's try signup if login fails. (If user exists, signup fails too)
         if (err.message.includes('Invalid login credentials')) {
-          // It could be wrong PIN, but let's try signup to see if user exists.
-          // Supabase signup with existing email will just say "User already registered" or send email
-          // Since we disabled confirm email, it creates an account if not exists
-          try {
-            await DataStore.signup(phone, pin);
-            await DataStore.login(phone, pin); // login after signup
-          } catch (signupErr) {
-            if (signupErr.message.includes('already registered')) {
-              alert('ভুল পিন দিয়েছেন। আবার চেষ্টা করুন।');
-              btn.disabled = false;
-              btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> এগিয়ে যান';
-              return;
-            } else {
-              throw signupErr;
-            }
-          }
+          alert('ভুল নম্বর বা পিন দিয়েছেন। আপনার অ্যাকাউন্ট না থাকলে নতুন করে নিবন্ধন করুন।');
         } else {
-          throw err;
+          alert('ত্রুটি: ' + err.message);
         }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> লগইন';
+        return;
       }
       
       Modal.close('auth-modal');
