@@ -376,7 +376,7 @@ const DataStore = {
     if (!user) return null;
     
     // Fetch donor profile if exists
-    const { data: donor } = await _supabase.from('donors').select('*').eq('user_id', user.id).single();
+    const { data: donor } = await _supabase.from('donors').select('*').eq('user_id', user.id).maybeSingle();
     if (donor) {
       return _mapDonor(donor);
     }
