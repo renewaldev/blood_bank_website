@@ -6,7 +6,7 @@ const HomeModule = {
   async render() {
     await this.renderEmergencyFeed();
     await this.renderBloodGroupOverview();
-    this.startCounters();
+    await this.startCounters();
     this.startEmergencyTicker();
   },
 
@@ -54,8 +54,17 @@ const HomeModule = {
     }).join('');
   },
 
-  startCounters() {
-    document.querySelectorAll('[data-target]').forEach(el => {
+  async startCounters() {
+    const donors = await DataStore.getDonors();
+    const stats = [
+      donors.length, // total donors
+      donors.filter(d => d.verificationLevel >= 2).length, // verified
+      donors.filter(d => d.canDonate).length, // available
+      new Set(donors.map(d => d.district).filter(Boolean)).size // active districts
+    ];
+
+    document.querySelectorAll('.hero-stat-value').forEach((el, idx) => {
+      if (stats[idx] !== undefined) el.dataset.target = stats[idx] || 0;
       counterObserver.observe(el);
     });
   },
