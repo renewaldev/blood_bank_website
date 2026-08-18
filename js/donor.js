@@ -262,12 +262,12 @@ const DonorModule = {
 
   updateWizardStep(step) {
     this.currentStep = step;
-    document.querySelectorAll('.wizard-step').forEach((el, i) => {
+    document.querySelectorAll('#register-form-card .wizard-step').forEach((el, i) => {
       const s = i + 1;
       el.classList.toggle('active', s === step);
       el.classList.toggle('done', s < step);
     });
-    document.querySelectorAll('.wizard-pane').forEach((pane, i) => {
+    document.querySelectorAll('#register-form-card .wizard-pane').forEach((pane, i) => {
       pane.classList.toggle('active', i + 1 === step);
     });
   },

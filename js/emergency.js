@@ -53,7 +53,7 @@ const EmergencyModule = {
       el.classList.toggle('active', s === step);
       el.classList.toggle('done', s < step);
     });
-    document.querySelectorAll('#emergency-wizard .wizard-pane').forEach((pane, i) => {
+    document.querySelectorAll('#emergency-form-section .wizard-pane').forEach((pane, i) => {
       pane.classList.toggle('active', i + 1 === step);
     });
   },
