@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>RENEWAL BLOOD NETWORK | Admin Panel</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="navbar-brand" href="#">
+      <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
+      <div>
+        <div class="brand-name">RENEWAL ADMIN</div>
+        <div class="brand-tagline">কন্ট্রোল প্যানেল</div>
+      </div>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="#" onclick="DataStore.logout()"><i class="fas fa-right-from-bracket"></i> লগআউট</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-view" style="display:block; padding-top:var(--space-2xl)">
+  <div class="container">
+    <div class="section-header" style="text-align:left">
+      <span class="section-tag"><i class="fas fa-shield-halved"></i> অ্যাডমিন</span>
+      <h2 style="margin-top:var(--space-sm)">সিস্টেম ড্যাশবোর্ড</h2>
+    </div>
+
+    <!-- Admin Tabs -->
+    <div class="tabs">
+      <button class="tab-btn admin-tab-btn active" data-tab="verif" onclick="AdminModule.switchTab('verif')"><i class="fas fa-hourglass-half"></i> যাচাই বাকি</button>
+      <button class="tab-btn admin-tab-btn" data-tab="emergency" onclick="AdminModule.switchTab('emergency')"><i class="fas fa-triangle-exclamation"></i> জরুরি অনুরোধ</button>
+      <button class="tab-btn admin-tab-btn" data-tab="contact" onclick="AdminModule.switchTab('contact')"><i class="fas fa-phone"></i> যোগাযোগ অনুরোধ</button>
+      <button class="tab-btn admin-tab-btn" data-tab="blood" onclick="AdminModule.switchTab('blood')"><i class="fas fa-droplet"></i> রক্তের গ্রুপ</button>
+      <button class="tab-btn admin-tab-btn" data-tab="donors" onclick="AdminModule.switchTab('donors')"><i class="fas fa-users"></i> সব দাতা</button>
+      <button class="tab-btn admin-tab-btn" data-tab="chart" onclick="AdminModule.switchTab('chart')"><i class="fas fa-chart-line"></i> ট্রেন্ড</button>
+    </div>
+
+    <!-- Tab: Pending Verifications -->
+    <div class="tab-pane active admin-tab-pane" id="atab-verif">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-hourglass-half" style="color:var(--pending-amber)"></i> যাচাই বাকি আছে এমন দাতা</div>
+        <div id="pending-verif-list"><!-- Rendered by JS --></div>
+      </div>
+    </div>
+
+    <!-- Tab: Emergency Queue -->
+    <div class="tab-pane admin-tab-pane" id="atab-emergency">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-triangle-exclamation" style="color:var(--blood-red)"></i> জরুরি রক্তের অনুরোধ ব্যবস্থাপনা</div>
+        <div id="admin-emergency-queue"><!-- Rendered by JS --></div>
+      </div>
+    </div>
+
+    <!-- Tab: Contact Requests -->
+    <div class="tab-pane admin-tab-pane" id="atab-contact">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-phone" style="color:var(--status-review)"></i> দাতার সাথে যোগাযোগের অনুরোধ</div>
+        <div id="admin-contact-requests"><!-- Rendered by JS --></div>
+      </div>
+    </div>
+
+    <!-- Tab: Blood Group Stats -->
+    <div class="tab-pane admin-tab-pane" id="atab-blood">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-droplet" style="color:var(--blood-red)"></i> রক্তের গ্রুপ পরিসংখ্যান</div>
+        <div id="blood-group-stats"><!-- Rendered by JS --></div>
+      </div>
+    </div>
+
+    <!-- Tab: All Donors -->
+    <div class="tab-pane admin-tab-pane" id="atab-donors">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-users" style="color:var(--text-primary)"></i> সকল রক্তদাতা</div>
+        <div id="admin-all-donors"><!-- Rendered by JS --></div>
+      </div>
+    </div>
+
+    <!-- Tab: Chart -->
+    <div class="tab-pane admin-tab-pane" id="atab-chart">
+      <div class="admin-section">
+        <div class="admin-section-title"><i class="fas fa-chart-line" style="color:var(--blood-red)"></i> নিবন্ধন ট্রেন্ড</div>
+        <canvas id="donation-trend-chart" style="max-height:350px"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    DataStore.init().then(() => {
+      AdminModule.init();
+    });
+  });
+</script>
+</body>
+</html>

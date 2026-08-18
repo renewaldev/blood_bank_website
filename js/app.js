@@ -11,7 +11,6 @@ const App = {
     'register': () => App.loadRegister(),
     'emergency': () => App.loadEmergency(),
     'dashboard': () => App.loadDashboard(),
-    'admin':    () => App.loadAdmin(),
     'map':      () => App.loadMap(),
     'leaderboard': () => App.loadLeaderboard(),
   },
@@ -29,6 +28,12 @@ const App = {
   navigate(page) {
     if (!page) page = 'home';
     this.currentPage = page;
+
+    // Hide all pages
+    if (page === 'admin') {
+      window.location.href = 'http://localhost:8081'; // Redirect to standalone Admin Panel
+      return;
+    }
 
     // Hide all views
     document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
@@ -167,7 +172,6 @@ const App = {
   loadRegister()   { DonorModule.renderRegistration(); },
   loadEmergency()  { EmergencyModule.render(); },
   loadDashboard()  { DashboardModule.render(); },
-  loadAdmin()      { AdminModule.render(); },
   loadMap()        { MapModule.render(); },
   loadLeaderboard(){ LeaderboardModule.render(); },
 };
