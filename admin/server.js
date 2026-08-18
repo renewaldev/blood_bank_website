@@ -184,6 +184,7 @@ const server = http.createServer((req, res) => {
     const config = JSON.stringify({
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
+      supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
     });
     res.writeHead(200, {
       'Content-Type': 'application/json; charset=utf-8',

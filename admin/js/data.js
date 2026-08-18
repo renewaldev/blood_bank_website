@@ -122,7 +122,7 @@ const DataStore = {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Cannot fetch config or unauthorized');
-      const { supabaseUrl, supabaseAnonKey } = await res.json();
+      const { supabaseUrl, supabaseAnonKey, supabaseServiceKey } = await res.json();
 
       if (!supabaseUrl || supabaseUrl.includes('YOUR_PROJECT')) {
         console.warn('[DataStore] Supabase credentials not set in .env — data will not load.');
@@ -140,7 +140,8 @@ const DataStore = {
         });
       }
 
-      _supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+      const keyToUse = supabaseServiceKey || supabaseAnonKey;
+      _supabase = window.supabase.createClient(supabaseUrl, keyToUse);
       console.log('[DataStore] Supabase client ready.');
     } catch (err) {
       console.error('[DataStore] Init failed:', err);
