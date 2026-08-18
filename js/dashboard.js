@@ -157,9 +157,8 @@ const DashboardModule = {
       opt.classList.toggle('selected-avail', opt.dataset.avail === user.availability);
       opt.onclick = async () => {
         await DataStore.updateDonor(user.id, { availability: opt.dataset.avail });
-        // Update cached user
+        // Update cached user locally
         user.availability = opt.dataset.avail;
-        DataStore.setCurrentUser(user);
         document.querySelectorAll('.avail-option').forEach(o => o.classList.remove('selected-avail'));
         opt.classList.add('selected-avail');
         Toast.show({ type: 'success', title: 'অবস্থা আপডেট', message: `অবস্থা "${opt.textContent.trim()}" করা হয়েছে।` });
