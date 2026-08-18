@@ -1,0 +1,22 @@
+{
+  "name": "renewal-blood-network",
+  "version": "1.0.0",
+  "description": "Renewal Blood Network — রক্তের প্রয়োজনে, মানুষের পাশে",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js --port 5500"
+  },
+  "keywords": [
+    "blood-donation",
+    "bangladesh",
+    "renewal-network",
+    "emergency"
+  ],
+  "author": "Renewal Foundation",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
