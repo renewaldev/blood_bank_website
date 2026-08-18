@@ -50,7 +50,6 @@
       <li><a href="#dashboard"    data-nav="dashboard"   data-page="dashboard"><i class="fas fa-user"></i> ড্যাশবোর্ড</a></li>
       <li><a href="#map"          data-nav="map"         data-page="map"><i class="fas fa-map"></i> ম্যাপ</a></li>
       <li><a href="#leaderboard"  data-nav="leaderboard" data-page="leaderboard"><i class="fas fa-trophy"></i> লিডারবোর্ড</a></li>
-      <li><a href="#admin"        data-nav="admin"       data-page="admin"><i class="fas fa-gear"></i> অ্যাডমিন</a></li>
     </ul>
 
     <div class="navbar-actions">
@@ -75,7 +74,6 @@
   <a href="#dashboard"    data-page="dashboard"><i class="fas fa-user"></i> ড্যাশবোর্ড</a>
   <a href="#map"          data-page="map"><i class="fas fa-map"></i> ম্যাপ</a>
   <a href="#leaderboard"  data-page="leaderboard"><i class="fas fa-trophy"></i> লিডারবোর্ড</a>
-  <a href="#admin"        data-page="admin"><i class="fas fa-gear"></i> অ্যাডমিন</a>
 </div>
 
 
@@ -818,94 +816,6 @@
 
       </div>
     </div>
-  </div>
-</div>
-
-
-<!-- ─────────────────────────────────
-     ADMIN DASHBOARD
-───────────────────────────────── -->
-<div id="view-admin" class="page-view admin-page">
-  <div class="admin-header">
-    <div class="container">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-md)">
-        <div>
-          <span class="admin-role-badge"><i class="fas fa-shield-halved"></i> SUPER ADMIN</span>
-          <h1 style="font-family:var(--font-bn);margin-top:0.5rem">অ্যাডমিন ড্যাশবোর্ড</h1>
-          <p style="font-family:var(--font-bn);color:var(--text-secondary)">Renewal Blood Network — Control Center</p>
-        </div>
-        <div style="display:flex;gap:0.5rem">
-          <span class="admin-role-badge" style="cursor:pointer"><i class="fas fa-chart-line"></i> Super Admin</span>
-          <span class="admin-role-badge" style="background:rgba(68,138,255,0.15);border-color:rgba(68,138,255,0.3);color:var(--review-blue);cursor:pointer"><i class="fas fa-user-check"></i> Verification Officer</span>
-          <span class="admin-role-badge" style="background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3);color:var(--verified-green);cursor:pointer"><i class="fas fa-hand-holding-droplet"></i> Blood Coordinator</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container" style="padding-top:var(--space-xl)">
-
-    <!-- Stats Grid -->
-    <div class="admin-stats-grid" id="admin-stats-grid"><!-- Rendered by JS --></div>
-
-    <!-- Admin Tabs -->
-    <div class="tabs">
-      <button class="tab-btn admin-tab-btn active" data-tab="verif" onclick="AdminModule.switchTab('verif')"><i class="fas fa-hourglass-half"></i> যাচাই বাকি</button>
-      <button class="tab-btn admin-tab-btn" data-tab="emergency" onclick="AdminModule.switchTab('emergency')"><i class="fas fa-triangle-exclamation"></i> জরুরি অনুরোধ</button>
-      <button class="tab-btn admin-tab-btn" data-tab="contact" onclick="AdminModule.switchTab('contact')"><i class="fas fa-phone"></i> যোগাযোগ অনুরোধ</button>
-      <button class="tab-btn admin-tab-btn" data-tab="blood" onclick="AdminModule.switchTab('blood')"><i class="fas fa-droplet"></i> রক্তের গ্রুপ</button>
-      <button class="tab-btn admin-tab-btn" data-tab="donors" onclick="AdminModule.switchTab('donors')"><i class="fas fa-users"></i> সব দাতা</button>
-      <button class="tab-btn admin-tab-btn" data-tab="chart" onclick="AdminModule.switchTab('chart')"><i class="fas fa-chart-line"></i> ট্রেন্ড</button>
-    </div>
-
-    <!-- Tab: Pending Verifications -->
-    <div class="tab-pane active admin-tab-pane" id="atab-verif">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-hourglass-half" style="color:var(--pending-amber)"></i> যাচাই বাকি আছে এমন দাতা</div>
-        <div id="pending-verif-list"><!-- Rendered by JS --></div>
-      </div>
-    </div>
-
-    <!-- Tab: Emergency Queue -->
-    <div class="tab-pane admin-tab-pane" id="atab-emergency">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-triangle-exclamation" style="color:var(--blood-red)"></i> জরুরি রক্তের অনুরোধ ব্যবস্থাপনা</div>
-        <div id="admin-emergency-queue"><!-- Rendered by JS --></div>
-      </div>
-    </div>
-
-    <!-- Tab: Contact Requests -->
-    <div class="tab-pane admin-tab-pane" id="atab-contact">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-phone" style="color:var(--status-review)"></i> দাতার সাথে যোগাযোগের অনুরোধ</div>
-        <div id="admin-contact-requests"><!-- Rendered by JS --></div>
-      </div>
-    </div>
-
-    <!-- Tab: Blood Group Stats -->
-    <div class="tab-pane admin-tab-pane" id="atab-blood">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-droplet" style="color:var(--blood-red)"></i> রক্তের গ্রুপ পরিসংখ্যান</div>
-        <div id="blood-group-stats"><!-- Rendered by JS --></div>
-      </div>
-    </div>
-
-    <!-- Tab: All Donors -->
-    <div class="tab-pane admin-tab-pane" id="atab-donors">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-users" style="color:var(--text-primary)"></i> সকল রক্তদাতা</div>
-        <div id="admin-all-donors"><!-- Rendered by JS --></div>
-      </div>
-    </div>
-
-    <!-- Tab: Chart -->
-    <div class="tab-pane admin-tab-pane" id="atab-chart">
-      <div class="admin-section">
-        <div class="admin-section-title"><i class="fas fa-chart-line" style="color:var(--blood-red)"></i> নিবন্ধন ট্রেন্ড</div>
-        <canvas id="donation-trend-chart" style="max-height:350px"></canvas>
-      </div>
-    </div>
-
   </div>
 </div>
 

@@ -40,6 +40,11 @@
       <h2 style="margin-top:var(--space-sm)">সিস্টেম ড্যাশবোর্ড</h2>
     </div>
 
+    <!-- Admin Overview Stats -->
+    <div class="grid-3" id="admin-stats-grid" style="margin-bottom:var(--space-2xl)">
+      <!-- Rendered by JS -->
+    </div>
+
     <!-- Admin Tabs -->
     <div class="tabs">
       <button class="tab-btn admin-tab-btn active" data-tab="verif" onclick="AdminModule.switchTab('verif')"><i class="fas fa-hourglass-half"></i> যাচাই বাকি</button>
@@ -106,7 +111,8 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     DataStore.init().then(() => {
-      AdminModule.init();
+      AdminModule.render();
+      AdminModule.switchTab('verif');
     });
   });
 </script>
