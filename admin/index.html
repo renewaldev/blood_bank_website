@@ -26,8 +26,27 @@
   </button>
 </div>
 
-<!-- Main Layout Container -->
-<div class="admin-layout">
+<!-- Secure Login Overlay -->
+<div id="admin-login-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-default);z-index:9999;display:flex;align-items:center;justify-content:center">
+  <div style="background:var(--bg-surface);padding:2rem;border-radius:var(--radius-lg);box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:350px;border:1px solid var(--border)">
+    <div style="text-align:center;color:var(--blood-red);font-size:2.5rem;margin-bottom:1rem">
+      <i class="fas fa-user-shield"></i>
+    </div>
+    <h3 style="font-family:var(--font-bn);text-align:center;margin-bottom:0.5rem">অ্যাডমিন প্যানেল</h3>
+    <p style="font-family:var(--font-bn);text-align:center;color:var(--text-secondary);margin-bottom:1.5rem;font-size:0.9rem">
+      সিস্টেমে প্রবেশ করতে পাসওয়ার্ড দিন
+    </p>
+    <div class="form-group">
+      <input type="password" class="form-control" id="admin-login-pwd" placeholder="••••••••" style="text-align:center;letter-spacing:0.2rem;font-size:1.2rem;padding:0.8rem" />
+    </div>
+    <button class="btn btn-primary btn-full" onclick="AdminAuth.login()" id="admin-login-btn">
+      <i class="fas fa-lock-open"></i> প্রবেশ করুন
+    </button>
+  </div>
+</div>
+
+<!-- Main Layout Container (Hidden until logged in) -->
+<div class="admin-layout" id="admin-main-layout" style="display:none">
   
   <!-- Sidebar Navigation -->
   <aside class="admin-sidebar" id="admin-sidebar">
@@ -47,7 +66,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      <a class="sidebar-link" style="color:var(--blood-red)" onclick="DataStore.logout()"><i class="fas fa-right-from-bracket"></i> লগআউট</a>
+      <a class="sidebar-link" style="color:var(--blood-red)" onclick="AdminAuth.logout()"><i class="fas fa-right-from-bracket"></i> লগআউট</a>
     </div>
   </aside>
 
@@ -134,15 +153,13 @@
   </main>
 </div>
 
-<script src="js/data.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
-<script src="js/admin.js?v=3"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
+<script src="js/admin.js?v=4"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    DataStore.init().then(() => {
-      AdminModule.render();
-      AdminModule.switchTab('verif');
-    });
+    // Check auth before anything else
+    AdminAuth.checkSession();
   });
 </script>
 </body>

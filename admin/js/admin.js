@@ -2,6 +2,71 @@
    RENEWAL BLOOD NETWORK — Admin Dashboard Module
    ============================================================ */
 
+const AdminAuth = {
+  checkSession() {
+    const token = sessionStorage.getItem('admin_token');
+    if (token) {
+      this.loadDashboard();
+    } else {
+      document.getElementById('admin-login-overlay').style.display = 'flex';
+      document.getElementById('admin-main-layout').style.display = 'none';
+    }
+  },
+
+  async login() {
+    const pwd = document.getElementById('admin-login-pwd').value;
+    const btn = document.getElementById('admin-login-btn');
+    if (!pwd) {
+      Toast.show({ type: 'error', title: 'ভুল ইনপুট', message: 'পাসওয়ার্ড দিন' });
+      return;
+    }
+
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> যাচাই হচ্ছে...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        sessionStorage.setItem('admin_token', data.token);
+        Toast.show({ type: 'success', title: 'লগইন সফল', message: 'ড্যাশবোর্ডে স্বাগতম!' });
+        document.getElementById('admin-login-pwd').value = '';
+        this.loadDashboard();
+      } else {
+        Toast.show({ type: 'error', title: 'লগইন ব্যর্থ', message: 'ভুল পাসওয়ার্ড' });
+      }
+    } catch (e) {
+      Toast.show({ type: 'error', title: 'সার্ভার ত্রুটি', message: 'লগইন করা সম্ভব হয়নি' });
+    } finally {
+      btn.innerHTML = '<i class="fas fa-lock-open"></i> প্রবেশ করুন';
+      btn.disabled = false;
+    }
+  },
+
+  loadDashboard() {
+    document.getElementById('admin-login-overlay').style.display = 'none';
+    document.getElementById('admin-main-layout').style.display = 'flex';
+    DataStore.init().then(() => {
+      AdminModule.render();
+      AdminModule.switchTab('verif');
+    }).catch(err => {
+      Toast.show({ type: 'error', title: 'সেশন মেয়াদোত্তীর্ণ', message: 'দয়া করে আবার লগইন করুন' });
+      this.logout();
+    });
+  },
+
+  logout() {
+    sessionStorage.removeItem('admin_token');
+    window.location.reload();
+  }
+};
+
+
 const AdminModule = {
   currentTab: 'overview',
 
@@ -401,5 +466,6 @@ const LeaderboardModule = {
   }
 };
 
+window.AdminAuth = AdminAuth;
 window.AdminModule = AdminModule;
 window.LeaderboardModule = LeaderboardModule;

@@ -144,8 +144,43 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Public Supabase config endpoint (anon key is safe to expose by design)
+  // Admin Login Endpoint
+  if (req.method === 'POST' && pathname === '/api/admin/login') {
+    let body = '';
+    req.on('data', chunk => body += chunk.toString());
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        if (data.password === process.env.ADMIN_PASSWORD) {
+          const token = Buffer.from(data.password).toString('base64');
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, token }));
+          logRequest(req, res, startTime, pathname, 0);
+        } else {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: 'Invalid password' }));
+          logRequest(req, res, startTime, pathname, 0);
+        }
+      } catch (e) {
+        res.writeHead(400);
+        res.end();
+      }
+    });
+    return;
+  }
+
+  // Secured Supabase config endpoint
   if (pathname === '/api/config') {
+    const authHeader = req.headers.authorization || '';
+    const expectedToken = Buffer.from(process.env.ADMIN_PASSWORD || '').toString('base64');
+    
+    if (authHeader !== `Bearer ${expectedToken}`) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Unauthorized' }));
+      logRequest(req, res, startTime, pathname, 0);
+      return;
+    }
+
     const config = JSON.stringify({
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',

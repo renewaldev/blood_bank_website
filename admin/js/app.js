@@ -2,7 +2,7 @@
    RENEWAL ADMIN — Core App
    ============================================================ */
 
-const Utils = {
+Object.assign(Utils, {
   formatDate(d) {
     if (!d) return 'N/A';
     const date = new Date(d);
@@ -32,7 +32,7 @@ const Utils = {
     const labels = ['নিবন্ধিত', 'মোবাইল ভেরিফাইড', 'পরিচয় ভেরিফাইড', 'রক্তের গ্রুপ ভেরিফাইড', 'রিনিউয়েল ভেরিফাইড'];
     return labels[level] || 'অজানা';
   }
-};
+});
 
 const Toast = {
   show({ type = 'info', title = '', message = '', duration = 4000 }) {
@@ -77,3 +77,26 @@ const Toast = {
 
 window.Utils = Utils;
 window.Toast = Toast;
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = +el.dataset.target;
+      let c = 0;
+      const increment = target / 40;
+      const updateCounter = () => {
+        c += increment;
+        if (c < target) {
+          el.innerText = Math.ceil(c);
+          requestAnimationFrame(updateCounter);
+        } else {
+          el.innerText = target;
+        }
+      };
+      updateCounter();
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+window.counterObserver = counterObserver;

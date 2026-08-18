@@ -115,9 +115,13 @@ const DataStore = {
     if (_supabase) return; // already initialised
 
     try {
-      // Fetch credentials from our server (loaded from .env)
-      const res = await fetch('/api/config');
-      if (!res.ok) throw new Error('Cannot reach /api/config');
+      const token = sessionStorage.getItem('admin_token');
+      if (!token) throw new Error('No auth token available. Please log in.');
+
+      const res = await fetch('/api/config', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Cannot fetch config or unauthorized');
       const { supabaseUrl, supabaseAnonKey } = await res.json();
 
       if (!supabaseUrl || supabaseUrl.includes('YOUR_PROJECT')) {
