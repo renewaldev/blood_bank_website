@@ -90,7 +90,7 @@ const DashboardModule = {
           <div style="font-size:3rem;color:var(--text-muted);margin-bottom:var(--space-md)"><i class="fas fa-lock"></i></div>
           <h2 style="font-family:var(--font-bn);margin-bottom:var(--space-sm)">অ্যাক্সেস সংরক্ষিত</h2>
           <p style="color:var(--text-secondary);font-family:var(--font-bn);margin-bottom:var(--space-xl)">ড্যাশবোর্ড দেখতে আপনাকে লগইন করতে হবে এবং দাতা হিসেবে নিবন্ধিত থাকতে হবে।</p>
-          <button class="btn btn-primary btn-lg" onclick="Modal.show('auth-modal')">লগইন করুন</button>
+          <button class="btn btn-primary btn-lg" onclick="Modal.open('auth-modal')">লগইন করুন</button>
         </div>`;
       return;
     }

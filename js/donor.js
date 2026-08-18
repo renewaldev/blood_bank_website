@@ -168,7 +168,7 @@ const DonorModule = {
     if (!authUser) {
       Modal.close('contact-modal');
       Toast.show({ type: 'error', title: 'লগইন করুন', message: 'যোগাযোগের অনুরোধ পাঠাতে আপনাকে লগইন করতে হবে।' });
-      Modal.show('auth-modal');
+      Modal.open('auth-modal');
       return;
     }
 
