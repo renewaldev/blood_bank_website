@@ -361,6 +361,19 @@ const DonorModule = {
       document.getElementById('cp-' + p)?.checked
     );
 
+    // Try to get real location
+    let realLat = null;
+    let realLng = null;
+    try {
+      const pos = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+      });
+      realLat = pos.coords.latitude;
+      realLng = pos.coords.longitude;
+    } catch (e) {
+      console.warn('Geolocation failed or denied. Using null coordinates.', e.message);
+    }
+
     const donor = {
       id: authUser.id,
       user_id: authUser.id,
@@ -390,8 +403,8 @@ const DonorModule = {
       verificationLog: [{ type: 'mobile', date: new Date().toISOString().split('T')[0], note: 'PIN verified' }],
       joinDate: new Date().toISOString().split('T')[0],
       suspicious: false, reported: 0,
-      lat: 23.8 + Math.random() * 0.5,
-      lng: 90.3 + Math.random() * 0.3,
+      lat: realLat,
+      lng: realLng,
     };
 
     await DataStore.addDonor(donor);
@@ -408,15 +421,6 @@ const DonorModule = {
       message: `স্বাগতম ${donor.name}! আপনি সফলভাবে রক্তদাতা হিসেবে নিবন্ধিত হয়েছেন।`,
       duration: 6000
     });
-
-    setTimeout(() => {
-      Toast.show({
-        type: 'info',
-        title: 'এলাকার দাতাদের জানানো হচ্ছে',
-        message: `আপনার এলাকায় ${donor.bloodGroup} রক্তের দাতাদের তালিকায় আপনাকে যোগ করা হয়েছে।`,
-        duration: 5000
-      });
-    }, 2000);
   },
 };
 

@@ -61,14 +61,15 @@ const HomeModule = {
   },
 
   async startEmergencyTicker() {
+    // Show the most recent verified emergency request once after 5s
     setTimeout(async () => {
-      const reqs = (await DataStore.getRequests()).filter(r => r.status === 'verified');
-      if (reqs.length > 0) {
-        const r = reqs[Math.floor(Math.random() * reqs.length)];
+      const reqs = await DataStore.getRequests();
+      const latest = reqs.filter(r => r.status === 'verified').sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt))[0];
+      if (latest) {
         Toast.show({
           type: 'emergency',
-          title: `জরুরি: ${r.bloodGroup} রক্ত প্রয়োজন`,
-          message: `${r.hospital}, ${r.district} — ${r.units} ব্যাগ। এখনই সাহায্য করুন!`,
+          title: `জরুরি: ${latest.bloodGroup} রক্ত প্রয়োজন`,
+          message: `${latest.hospital}, ${latest.district} — ${latest.units} ব্যাগ। এখনই সাহায্য করুন!`,
           duration: 8000
         });
       }
@@ -97,7 +98,7 @@ const DashboardModule = {
 
     this.renderProfile(user);
     this.renderDonationHistory(user);
-    this.renderNotifications();
+    this.renderNotifications(user);
     this.renderNextEligible(user);
     this.renderVerificationLog(user);
   },
@@ -217,15 +218,35 @@ const DashboardModule = {
       </div>`).join('');
   },
 
-  renderNotifications() {
+  async renderNotifications(user) {
     const container = document.getElementById('dash-notifications');
     if (!container) return;
 
-    const notifs = [
-      { icon: '<i class="fas fa-triangle-exclamation" style="color:#FF1744"></i>', title: 'জরুরি রক্তের অনুরোধ', body: 'আপনার এলাকায় A+ রক্তের দরকার। DMCH, ঢাকা। ১ ব্যাগ।', time: '২ ঘণ্টা আগে', type: 'emergency' },
-      { icon: '<i class="fas fa-circle-check" style="color:#00E676"></i>', title: 'প্রোফাইল আপডেট', body: 'আপনার Trust Score ৯৪ পয়েন্টে পৌঁছেছে।', time: 'গতকাল', type: 'success' },
-      { icon: '<i class="fas fa-calendar-check" style="color:#00E5FF"></i>', title: 'রক্তদানের অনুস্মারক', body: 'আপনি এখন রক্ত দিতে পারবেন। আজই একজনের জীবন বাঁচান।', time: '৩ দিন আগে', type: 'info' },
-    ];
+    let notifs = [];
+
+    // Check if eligible to donate
+    if (user && user.canDonate) {
+      notifs.push({ icon: '<i class="fas fa-calendar-check" style="color:#00E5FF"></i>', title: 'রক্তদানের সুযোগ', body: 'আপনি এখন রক্ত দিতে পারবেন। আজই একজনের জীবন বাঁচান।', time: 'এখন', type: 'info' });
+    }
+
+    // Fetch real emergency requests in their district
+    const reqs = await DataStore.getRequests();
+    const localReqs = reqs.filter(r => r.status === 'verified' && r.district === user.district);
+    
+    localReqs.slice(0, 3).forEach(r => {
+      notifs.push({ 
+        icon: '<i class="fas fa-triangle-exclamation" style="color:#FF1744"></i>', 
+        title: `জরুরি ${r.bloodGroup} রক্তের অনুরোধ`, 
+        body: `আপনার জেলায় (${r.district}) রক্তের দরকার। ${r.hospital}। ${r.units} ব্যাগ।`, 
+        time: Utils.formatDate(r.submittedAt), 
+        type: 'emergency' 
+      });
+    });
+
+    if (notifs.length === 0) {
+      container.innerHTML = '<p class="text-muted font-bn">কোনো নতুন নোটিফিকেশন নেই</p>';
+      return;
+    }
 
     container.innerHTML = notifs.map(n => `
       <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--border)">

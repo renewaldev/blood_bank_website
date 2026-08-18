@@ -170,15 +170,6 @@ const EmergencyModule = {
       message: 'Renewal Foundation শীঘ্রই যাচাই করবে।',
       duration: 6000
     });
-
-    setTimeout(() => {
-      Toast.show({
-        type: 'emergency',
-        title: `${request.bloodGroup} দাতাদের জানানো হচ্ছে`,
-        message: `${request.district} এলাকার ${request.bloodGroup} দাতাদের জরুরি বার্তা পাঠানো হচ্ছে।`,
-        duration: 7000
-      });
-    }, 3000);
   },
 
   async renderActiveRequests() {
