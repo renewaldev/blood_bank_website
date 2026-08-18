@@ -154,6 +154,7 @@ const DataStore = {
       .channel('admin-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'blood_requests' }, callback)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'donors' }, callback)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'contact_requests' }, callback)
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           console.log('[DataStore] Real-time updates active');
