@@ -10,6 +10,14 @@ const EmergencyModule = {
     this.updateWizardStep(1);
     this.populateSelects();
     await this.renderActiveRequests();
+    
+    // Listen for realtime updates
+    if (!this._subscribed) {
+      DataStore.subscribeToChanges(() => {
+        this.renderActiveRequests();
+      });
+      this._subscribed = true;
+    }
   },
 
   populateSelects() {

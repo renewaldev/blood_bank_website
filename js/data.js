@@ -138,9 +138,21 @@ const DataStore = {
 
       _supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
       console.log('[DataStore] Supabase client ready.');
-    } catch (err) {
-      console.error('[DataStore] Init failed:', err);
+    } catch (e) {
+      console.error('[DataStore] Initialisation error:', e);
     }
+  },
+
+  subscribeToChanges(callback) {
+    if (!_supabase) return;
+    _supabase
+      .channel('public-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blood_requests' }, callback)
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('[DataStore] Public real-time updates active');
+        }
+      });
   },
 
   /* ── Donors ── */
