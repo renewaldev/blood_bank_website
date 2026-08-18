@@ -192,8 +192,11 @@ const EmergencyModule = {
 
   renderRequestCard(r) {
     const statusInfo = Utils.getStatusBadge(r.status);
-    const time = r.neededTime || '';
+    const time = r.neededTime ? Utils.formatTime12(r.neededTime) : '';
     const isUrgent = r.status === 'verified' && r.neededDate === new Date().toISOString().split('T')[0];
+    
+    // Formatting Location
+    const locationStr = [r.upazila, r.district].filter(Boolean).join(', ');
 
     return `
     <div class="emergency-card ${isUrgent ? 'anim-glowRed' : ''}">
@@ -213,9 +216,9 @@ const EmergencyModule = {
 
       <div class="e-details">
         <div class="e-detail"><span class="icon"><i class="fas fa-hospital"></i></span>${r.hospital}</div>
-        <div class="e-detail"><span class="icon"><i class="fas fa-location-dot"></i></span>${r.upazila || ''}, ${r.district}</div>
-        <div class="e-detail"><span class="icon"><i class="fas fa-file-lines"></i></span>${r.reason}</div>
-        <div class="e-detail"><span class="icon"><i class="fas fa-clock"></i></span>প্রয়োজন: ${r.neededDate} ${time ? 'সময়: '+time : ''}</div>
+        ${locationStr ? `<div class="e-detail"><span class="icon"><i class="fas fa-location-dot"></i></span>${locationStr}</div>` : ''}
+        ${r.reason && r.reason !== 'null' ? `<div class="e-detail"><span class="icon"><i class="fas fa-file-lines"></i></span>${r.reason}</div>` : ''}
+        <div class="e-detail"><span class="icon"><i class="fas fa-clock"></i></span>প্রয়োজন: ${r.neededDate && r.neededDate !== 'null' ? Utils.formatDate(r.neededDate) : 'যত দ্রুত সম্ভব'}${time ? ' (সময়: '+time+')' : ''}</div>
       </div>
 
       <div class="e-footer">

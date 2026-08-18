@@ -410,6 +410,14 @@ const Utils = {
     if (!dateStr) return 'N/A';
     return new Date(dateStr).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
   },
+  formatTime12(timeStr) {
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':');
+    let hours = parseInt(h);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${m} ${ampm}`;
+  },
   monthsAgo(dateStr) {
     if (!dateStr) return null;
     const diff = new Date() - new Date(dateStr);

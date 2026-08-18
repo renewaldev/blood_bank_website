@@ -244,6 +244,13 @@
 }
 
 /* ── Emergency Feed Section ── */
+.requests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
 .emergency-section {
   background: #F8FAFC;
   padding: var(--space-3xl) 0;
