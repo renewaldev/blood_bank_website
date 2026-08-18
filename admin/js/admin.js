@@ -54,6 +54,12 @@ const AdminAuth = {
     DataStore.init().then(() => {
       AdminModule.render();
       AdminModule.switchTab('verif');
+
+      // Setup Real-time updates
+      DataStore.subscribeToChanges(() => {
+        AdminModule.render();
+        Toast.show({ type: 'info', title: 'লাইভ আপডেট', message: 'ডেটাবেসে নতুন পরিবর্তন এসেছে।' });
+      });
     }).catch(err => {
       Toast.show({ type: 'error', title: 'সেশন মেয়াদোত্তীর্ণ', message: 'দয়া করে আবার লগইন করুন' });
       this.logout();

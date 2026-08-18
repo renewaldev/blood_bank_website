@@ -148,6 +148,19 @@ const DataStore = {
     }
   },
 
+  subscribeToChanges(callback) {
+    if (!_supabase) return;
+    _supabase
+      .channel('admin-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blood_requests' }, callback)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'donors' }, callback)
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('[DataStore] Real-time updates active');
+        }
+      });
+  },
+
   /* ── Donors ── */
   async getDonors() {
     if (!_supabase) return [];
