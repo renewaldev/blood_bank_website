@@ -169,6 +169,7 @@ const DataStore = {
     if (!_supabase) return donor;
     const row = {
       id:                donor.id,
+      user_id:           donor.user_id || donor.id,
       name:              donor.name,
       name_en:           donor.nameEn,
       phone:             donor.phone,
