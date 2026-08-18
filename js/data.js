@@ -340,7 +340,7 @@ const DataStore = {
   /* ── Authentication ── */
   async signup(phone, pin) {
     if (!_supabase) return null;
-    const email = `${phone}@renewalblood.local`;
+    const email = `${phone}@renewalblood.com`;
     const password = `${pin}RenewalSec!`;
     const { data, error } = await _supabase.auth.signUp({ email, password });
     if (error) {
@@ -352,7 +352,7 @@ const DataStore = {
 
   async login(phone, pin) {
     if (!_supabase) return null;
-    const email = `${phone}@renewalblood.local`;
+    const email = `${phone}@renewalblood.com`;
     const password = `${pin}RenewalSec!`;
     const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
     if (error) {
